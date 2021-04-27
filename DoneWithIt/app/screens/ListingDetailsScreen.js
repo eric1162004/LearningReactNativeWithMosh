@@ -1,17 +1,25 @@
 import React from "react";
-import { Image, View, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { Image } from "react-native-expo-image-cache";
 
 import AppText from "../components/AppText/AppText";
 import colors from "../config/colors";
 import ListItem from "./../components/ListItem";
 
-export default function ListingDetailsScreen() {
+export default function ListingDetailsScreen({ route }) {
+  const listing = route.params;
+
   return (
     <View>
-      <Image style={styles.image} source={require("../assets/item1.jpg")} />
+      <Image
+        style={styles.image}
+        preview={{ uri: listing.images[0].thumbnailUrl }}
+        tint="light"
+        uri={listing.images[0].url}
+      />
       <View style={styles.detailsContainer}>
-        <AppText style={styles.title}>Red jacket for sale</AppText>
-        <AppText style={styles.price}>$100</AppText>
+        <AppText style={styles.title}>{listing.title}</AppText>
+        <AppText style={styles.price}>{listing.price}</AppText>
         <View style={styles.userContainer}>
           <ListItem
             image={require("../assets/person1.jpg")}
@@ -42,7 +50,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "500",
   },
-  userContainer:{
-      marginVertical: 40
-  }
+  userContainer: {
+    marginVertical: 40,
+  },
 });

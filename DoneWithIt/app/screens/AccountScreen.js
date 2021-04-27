@@ -5,7 +5,8 @@ import ListItem from "../components/ListItem";
 import ListItemSeparator from "../components/ListItemSeparator";
 import Screen from "../components/Screen";
 import colors from "../config/colors";
-import Icon from './../components/Icon';
+import Icon from "./../components/Icon";
+import useAuth from "../auth/useAuth";
 
 const menuItems = [
   {
@@ -21,16 +22,19 @@ const menuItems = [
       name: "email",
       backgroundColor: colors.secondary,
     },
+    targetScreen: "Messages",
   },
 ];
 
-function AccountScreen(props) {
+function AccountScreen({ navigation }) {
+  const { user, logOut } = useAuth();
+
   return (
     <Screen style={styles.screen}>
       <View style={styles.container}>
         <ListItem
-          title="Julia"
-          subTitle="julia@gmail.com"
+          title={user.name}
+          subTitle={user.email}
           image={require("../assets/person1.jpg")}
         />
       </View>
@@ -47,20 +51,25 @@ function AccountScreen(props) {
                   backgroundColor={item.icon.backgroundColor}
                 />
               }
+              onPress={() => navigation.navigate(item.targetScreen)}
             />
           )}
           ItemSeparatorComponent={ListItemSeparator}
         ></FlatList>
       </View>
-      <ListItem title="Log Out" IconComponent={<Icon name="logout" backgroundColor="#ffe66d"/>}/>
+      <ListItem
+        title="Log Out"
+        IconComponent={<Icon name="logout" backgroundColor="#ffe66d" />}
+        onPress={() => logOut()}
+      />
     </Screen>
   );
 }
 
 const styles = StyleSheet.create({
-    screen:{
-backgroundColor: colors.light
-    },
+  screen: {
+    backgroundColor: colors.light,
+  },
   container: {
     marginVertical: 20,
   },
